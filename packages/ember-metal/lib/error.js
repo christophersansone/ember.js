@@ -1,12 +1,4 @@
-const errorProps = [
-  'description',
-  'fileName',
-  'lineNumber',
-  'message',
-  'name',
-  'number',
-  'stack'
-];
+
 
 /**
   A subclass of the JavaScript Error object for use in Ember.
@@ -18,7 +10,7 @@ const errorProps = [
   @public
 */
 export default function EmberError() {
-  let tmp = Error.apply(this, arguments);
+  Error.apply(this, arguments);
 
   // Adds a `stack` property to the given error object that will yield the
   // stack trace at the time captureStackTrace was called.
@@ -29,10 +21,6 @@ export default function EmberError() {
   // that are not very helpful for the user.
   if (Error.captureStackTrace) {
     Error.captureStackTrace(this, EmberError);
-  }
-  // Unfortunately errors are not enumerable in Chrome (at least), so `for prop in tmp` doesn't work.
-  for (let idx = 0; idx < errorProps.length; idx++) {
-    this[errorProps[idx]] = tmp[errorProps[idx]];
   }
 }
 
