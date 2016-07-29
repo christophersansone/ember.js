@@ -9,8 +9,12 @@
   @constructor
   @public
 */
-export default function EmberError() {
-  Error.apply(this, arguments);
+export default function EmberError(message) {
+  if (!(this instanceof EmberError)) {
+    return new EmberError(message);
+  }
+  
+  var that = Error.apply(this, arguments);
 
   // Adds a `stack` property to the given error object that will yield the
   // stack trace at the time captureStackTrace was called.
@@ -20,8 +24,10 @@ export default function EmberError() {
   // This is useful because we can hide Ember implementation details
   // that are not very helpful for the user.
   if (Error.captureStackTrace) {
-    Error.captureStackTrace(this, EmberError);
+    Error.captureStackTrace(that, EmberError);
   }
+  
+  return that;
 }
 
 EmberError.prototype = Object.create(Error.prototype);
